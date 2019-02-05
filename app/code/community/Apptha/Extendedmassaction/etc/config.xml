@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * Apptha
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apptha.com/LICENSE.txt
+ *
+ * ==============================================================
+ *                 MAGENTO EDITION USAGE NOTICE
+ * ==============================================================
+ * This package designed for Magento COMMUNITY edition
+ * Apptha does not guarantee correct work of this extension
+ * on any other Magento edition except Magento COMMUNITY edition.
+ * Apptha does not provide extension support in case of
+ * incorrect edition usage.
+ * ==============================================================
+ *
+ * @category    Apptha
+ * @package     Apptha_Extendedmassaction
+ * @version     1.0.0
+ * @author      Apptha Team <developers@contus.in>
+ * @copyright   Copyright (c) 2014 Apptha. (http://www.apptha.com)
+ * @license     http://www.apptha.com/LICENSE.txt
+ * 
+ */ -->
+
+<config>
+    <modules>
+        <Apptha_Extendedmassaction>
+        	<version>1.0.0</version>
+        </Apptha_Extendedmassaction>
+    </modules>
+    
+    <global>
+    	<models>
+            <extendedmassaction>
+                <class>Apptha_Extendedmassaction_Model</class>
+                <resourceModel>extendedmassaction_resource</resourceModel>
+            </extendedmassaction>
+            <extendedmassaction_resource>
+                <class>Apptha_Extendedmassaction_Model_Resource</class>
+               	<entities>
+                	<extendedmassaction>
+						<table>extendedmassaction_column_details</table>
+					</extendedmassaction>
+               	</entities>
+             </extendedmassaction_resource>
+        </models>
+        <resources>
+			<extendedmassaction_setup>
+				 <setup>
+				      <module>Apptha_Extendedmassaction</module>
+				  </setup>
+			</extendedmassaction_setup>
+		</resources>
+    	<blocks>
+          	<adminhtml>
+ 	        	<rewrite>
+					<catalog_product>Apptha_Extendedmassaction_Block_Adminhtml_Catalog_Product</catalog_product>
+				</rewrite>
+				
+	        	<rewrite>
+					<catalog_product_grid>Apptha_Extendedmassaction_Block_Adminhtml_Catalog_Product_Grid</catalog_product_grid>
+				</rewrite>  
+			</adminhtml>
+          
+		    <extendedmassaction>
+		   		<class>Apptha_Extendedmassaction_Block</class>
+		   	</extendedmassaction> 
+       </blocks>
+      <events>
+      		<core_block_abstract_prepare_layout_before>
+      			<observers>
+					<addColumnsOnLoad>
+						<type>model</type>
+						<class>Apptha_Extendedmassaction_Model_Observer</class>
+						<method>addColumnOnLoad</method>
+					</addColumnsOnLoad>
+				</observers>
+      		</core_block_abstract_prepare_layout_before>
+      		
+     		<adminhtml_catalog_product_grid_prepare_massaction>
+				<observers>
+					<addMassActionToGrid>
+						<type>model</type>
+						<class>Apptha_Extendedmassaction_Model_Observer</class>
+						<method>addMassAction</method>
+					</addMassActionToGrid>
+				</observers>
+           </adminhtml_catalog_product_grid_prepare_massaction>
+           
+           <extendedmassaction_adminhtml_catalog_product_grid_prepare_column>
+				<observers>
+            	    <customgrid_column_append>
+                	    <type>model</type>
+                        <class>Apptha_Extendedmassaction_Model_Observer</class>
+                        <method>appendCustomColumn</method>
+                    </customgrid_column_append>
+        	    </observers>
+       	 </extendedmassaction_adminhtml_catalog_product_grid_prepare_column> 
+            
+         <extendedmassaction_adminhtml_catalog_product_grid_prepare_column_after>
+            	<observers>
+            		<customgrid_column_edit>
+                	    <type>model</type>
+                        <class>Apptha_Extendedmassaction_Model_Observer</class>
+                        <method>editColumn</method>
+                    </customgrid_column_edit>
+            	    <customgrid_column_remove>
+                	    <type>model</type>
+                        <class>Apptha_Extendedmassaction_Model_Observer</class>
+                        <method>removeColumn</method>
+                    </customgrid_column_remove>
+        	    </observers>
+            </extendedmassaction_adminhtml_catalog_product_grid_prepare_column_after>
+        </events>  
+        
+        <helpers>
+        	 <extendedmassaction>
+		   		<class>Apptha_Extendedmassaction_Helper</class>
+		   	</extendedmassaction> 
+        </helpers>         
+
+    </global>
+    
+     <admin>
+        <routers>
+            <extendedmassaction>
+            	<use>admin</use>
+                <args>
+                    <modules>
+                        <extendedmassaction before="Mage_Adminhtml">Apptha_Extendedmassaction_Adminhtml</extendedmassaction>
+                    </modules>
+                </args>
+            </extendedmassaction>
+        </routers>
+    </admin>
+   
+    <adminhtml> 
+    	<layout>
+			<updates>
+				<extendedmassaction>
+					<file>extendedmassaction.xml</file>
+				</extendedmassaction>
+			</updates>
+		</layout>
+		
+		<acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <extendedmassaction_options>
+                                            <title>Extended Mass Action</title>
+                                        </extendedmassaction_options> 
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml> 
+    
+   <frontend>
+   		<routers>
+          	<extendedmassaction>
+               	<use>standard</use>
+             	<args>
+                   	<module>Apptha_Extendedmassaction</module>
+               	 	<frontName>extendedmassaction</frontName>
+               	</args>
+            </extendedmassaction>
+    	 </routers>	 
+       	 <layout>
+            <updates>
+                <extendedmassaction>
+                    <file>extendedmassaction.xml</file>
+                </extendedmassaction>
+            </updates>
+        </layout>
+   </frontend> 
+</config>

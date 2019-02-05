@@ -1,0 +1,70 @@
+ <?php
+/**
+ * Apptha
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the EULA
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://www.apptha.com/LICENSE.txt
+*
+* ==============================================================
+*                 MAGENTO EDITION USAGE NOTICE
+* ==============================================================
+* This package designed for Magento COMMUNITY edition
+* Apptha does not guarantee correct work of this extension
+* on any other Magento edition except Magento COMMUNITY edition.
+* Apptha does not provide extension support in case of
+* incorrect edition usage.
+* ==============================================================
+*
+* @category    Apptha
+* @package     Apptha_Extendedmassaction
+* @version     1.0.0
+* @author      Apptha Team <developers@contus.in>
+* @copyright   Copyright (c) 2014 Apptha. (http://www.apptha.com)
+* @license     http://www.apptha.com/LICENSE.txt
+*
+*/
+?>
+
+<form id="show_hide_cloumns" method="post" action="<?php echo $this->getPostUrl(); ?>">
+	<input type="hidden" name="form_key" value="<?php echo $this->getFormKey(); ?>" />
+		
+		<ul>
+		
+			<?php  foreach ($this->customAttributeDatas() as $custom_attribute=>$value):?>
+			<li>
+					<input type="checkbox" class="columns" name="columns[]" 
+							value="<?php echo $custom_attribute?>"
+						
+						<?php  foreach ($this->isAttributeVisible() as $attributes){
+							echo ($custom_attribute==$attributes)?'checked':'';} ?> >
+						
+						<?php echo $value ?>
+				</li>			
+			<?php endforeach; ?>
+			
+			<?php foreach ($this->getAttributes() as $attribute): ?>
+				<?php $attribute_code = $attribute->getAttributeCode();
+				if($this->isExcludedAttributes($attribute_code) || !$attribute->getFrontendLabel() ) continue;
+				?>
+				<li>
+					<input type="checkbox" name="columns[]" 
+							value="<?php echo $attribute_code ?>" 
+					
+					<?php  foreach ($this->isAttributeVisible() as $attributes){
+							echo ($attribute_code==$attributes)?'checked':'';} ?>>
+			
+					<?php echo ($attribute->getFrontendLabel())?:$attribute_code; ?>
+		
+				</li>			
+			<?php endforeach; ?>
+			
+	</ul>
+	<button name="submit" type="submit" class="scalable " >
+			<span>Submit</span>
+		</button>
+</form>
+

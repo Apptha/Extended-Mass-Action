@@ -1,0 +1,368 @@
+<?php
+/**
+ * Apptha
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apptha.com/LICENSE.txt
+ *
+ * ==============================================================
+ *                 MAGENTO EDITION USAGE NOTICE
+ * ==============================================================
+ * This package designed for Magento COMMUNITY edition
+ * Apptha does not guarantee correct work of this extension
+ * on any other Magento edition except Magento COMMUNITY edition.
+ * Apptha does not provide extension support in case of
+ * incorrect edition usage.
+ * ==============================================================
+ *
+ * @category    Apptha
+ * @package     Apptha_Extendedmassaction
+ * @version     1.0.0
+ * @author      Apptha Team <developers@contus.in>
+ * @copyright   Copyright (c) 2014 Apptha. (http://www.apptha.com)
+ * @license     http://www.apptha.com/LICENSE.txt
+ *
+ */
+?>
+<?php
+/**
+ * Template for Apptha_Extendedmassaction_Block_Widget_Grid
+ *
+ *  getId()
+ *  getCollection()
+ *  getColumns()
+ *  getPagerVisibility()
+ *  getVarNamePage()
+ */
+
+
+$numColumns = sizeof($this->getColumns());
+?>
+<?php if($this->getCollection()): ?>
+    <?php if($this->canDisplayContainer()): ?>
+        <?php if($this->getGridHeader()): ?>
+        <div class="content-header">
+            <table cellspacing="0">
+                <tr>
+                    <td style="width:50%;"><h2><?php echo $this->getGridHeader(); ?></h2></td>
+                </tr>
+            </table>
+        </div>
+        <?php endif ?>
+
+        <div id="<?php echo $this->getId() ?>">
+    <?php else: ?>
+        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <?php endif; ?>
+<?php if($this->getPagerVisibility() || $this->getExportTypes() || $this->getFilterVisibility()): ?>
+    <table cellspacing="0" class="actions">
+        <tr>
+        <?php if($this->getPagerVisibility()): ?>
+            <td class="pager">
+            <?php echo $this->__('Page') ?>
+
+            <?php $_curPage  = $this->getCollection()->getCurPage() ?>
+            <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
+            <?php if($_curPage>1): ?>
+                <a href="#" title="<?php echo $this->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="Go to Previous page" class="arrow"/></a>
+            <?php else: ?>
+                <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left_off.gif') ?>" alt="Go to Previous page" class="arrow"/>
+            <?php endif; ?>
+
+            <input type="text" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>" class="input-text page" onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
+
+            <?php if($_curPage < $_lastPage): ?>
+                <a href="#" title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="Go to Next page" class="arrow"/></a>
+            <?php else: ?>
+                <img src="<?php echo $this->getSkinUrl('images/pager_arrow_right_off.gif') ?>" alt="Go to Previous page" class="arrow"/>
+            <?php endif; ?>
+
+            <?php echo $this->__('of %s pages', $this->getCollection()->getLastPageNumber()) ?>
+            <span class="separator">|</span>
+            <?php echo $this->__('View') ?>
+            <select name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
+                <option value="20"<?php if($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
+                <option value="30"<?php if($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
+                <option value="50"<?php if($this->getCollection()->getPageSize()==50): ?> selected="selected"<?php endif; ?>>50</option>
+                <option value="100"<?php if($this->getCollection()->getPageSize()==100): ?> selected="selected"<?php endif; ?>>100</option>
+                <option value="200"<?php if($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
+            </select>
+            <?php echo $this->__('per page') ?><span class="separator">|</span>
+            <?php echo $this->__('Total %d records found', $this->getCollection()->getSize()) ?>
+            <span id="<?php echo $this->getHtmlId() ?>-total-count" class="no-display"><?php echo $this->getCollection()->getSize() ?></span>
+            <?php if($this->getRssLists()): ?>
+                <?php foreach ($this->getRssLists() as $_rss): ?>
+                <span class="separator">|</span><a href="<?php echo $_rss->getUrl() ?>" class="link-feed"><?php echo $_rss->getLabel() ?></a>
+                <?php endforeach ?>
+            <?php endif; ?>
+        </td>
+    <?php endif ?>
+    <?php if($this->getExportTypes()): ?>
+        <td class="export a-right">
+            <img src="<?php echo $this->getSkinUrl('images/icon_export.gif') ?>" alt="" class="v-middle"/>&nbsp; <?php echo $this->__('Export to:') ?>
+            <select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export" style="width:8em;">
+            <?php foreach ($this->getExportTypes() as $_type): ?>
+                <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
+            <?php endforeach; ?>
+            </select>
+            <?php echo $this->getExportButtonHtml() ?>
+        </td>
+    <?php endif; ?>
+        <td class="filter-actions a-right">
+            <?php echo $this->getMainButtonsHtml() ?>
+        </td>
+        </tr>
+    </table>
+<?php endif; ?>
+<?php if($this->getMassactionBlock()->isAvailable()): ?>
+<?php echo $this->getMassactionBlockHtml() ?>
+<?php endif ?>
+<div class="grid">
+    <div class="hor-scroll">
+    <table cellspacing="0" class="data" id="<?php echo $this->getId() ?>_table">
+        <?php foreach ($this->getColumns() as $_column): ?>
+        <col <?php echo $_column->getHtmlProperty() ?> />
+        <?php endforeach; ?>
+        <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
+            <thead>
+                <?php if ($this->getHeadersVisibility()): ?>
+                    <tr class="headings">
+                    <?php foreach ($this->getColumns() as $_column): ?>
+                        <th<?php echo $_column->getHeaderHtmlProperty() ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></th>
+                    <?php endforeach; ?>
+                    </tr>
+                <?php endif; ?>
+                <?php if ($this->getFilterVisibility()): ?>
+                    <tr class="filter">
+                    <?php $i=0;foreach ($this->getColumns() as $_column): ?>
+                        <th
+                     <?php echo $_column->getHeaderHtmlProperty() ?> ><?php echo $_column->getFilterHtml() ?></th>
+                    <?php endforeach; ?>
+                    </tr>
+                <?php endif ?>
+            </thead>
+        <?php endif; ?>
+        <?php if ($this->getCountTotals()): ?>
+            <tfoot>
+                <tr class="totals">
+                <?php foreach ($this->getColumns() as $_column): ?>
+                    <th class="<?php echo $_column->getCssProperty() ?>"><?php echo ($_column->hasTotalsLabel()) ? $_column->getTotalsLabel() : $_column->getRowField($_column->getGrid()->getTotals()) ?>&nbsp;</th>
+                <?php endforeach; ?>
+                </tr>
+            </tfoot>
+        <?php endif; ?>
+
+        <tbody>
+        <?php if (($this->getCollection()->getSize()>0) && (!$this->getIsCollapsed())): ?>
+        <?php foreach ($this->getCollection() as $_index=>$_item): ?>
+            <tr title="<?php //echo $this->getRowUrl($_item) ?>" id="<?php echo $_item->getId() ?>" <?php if ($_class = $this->getRowClass($_item)):?> class="<?php echo $_class; ?>"<?php endif;?>>
+            
+            <?php $i=0;foreach ($this->getColumns() as $_column): ?>
+
+                <?php if ($this->shouldRenderCell($_item, $_column)):?>
+                    <?php $_rowspan = $this->getRowspan($_item, $_column);?>
+                    
+  
+                    <td 
+                    	data-edit="<?php echo $_column->getIndex(); ?>"
+                    	data-type="<?php echo $_column->getType(); ?>"
+                    	data-product-id="<?php echo $_item->getId() ?>"
+                 		<?php echo ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>
+                    	class="<?php echo ($_column->getIsEditiable())? 'canEdit':''; ?> <?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns?'last':'' ?>"
+                  	 > 
+                  	 	<div class="inner_<?php echo $_column->getIndex(); ?>" data-real="<?php echo $_item->getData($_column->getIndex()); ?>" class="real_val">
+	                        <?php
+		                        if($_column->getIsEditiable()): 
+		                        	 echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;'); 
+		                        		else:echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;');
+		                        endif;
+	                        ?>
+ 						</div> 
+ 						<div class="edit_<?php echo $_column->getIndex(); ?>" class="edit_val">
+ 						</div>   
+
+ 						<div class="button_<?php echo $_column->getIndex(); ?>">
+ 							</div>
+                   </td>
+                    
+                    <?php if ($this->shouldRenderEmptyCell($_item, $_column)):?>
+                        <td colspan="<?php echo $this->getEmptyCellColspan($_item)?>" class="last"><?php echo $this->getEmptyCellLabel()?></td>
+                    <?php endif;?>
+                <?php endif;?>
+
+            <?php endforeach; ?>
+            </tr>
+            
+        <?php endforeach; ?>
+        <?php elseif ($this->getEmptyText()): ?>
+            <tr>
+                <td class="empty-text <?php echo $this->getEmptyTextClass() ?>" colspan="<?php echo $numColumns ?>"><?php echo $this->getEmptyText() ?></td>
+            </tr>
+        <?php endif; ?>
+        </tbody>
+
+    </table>
+    </div>
+</div>
+<?php if($this->canDisplayContainer()): ?>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+           
+   <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
+    <?php echo $this->getJsObjectName() ?>.useAjax = '<?php echo $this->getUseAjax() ?>';
+    <?php if($this->getRowClickCallback()): ?>
+        <?php echo $this->getJsObjectName() ?>.rowClickCallback = <?php echo $this->getRowClickCallback() ?>;
+    <?php endif; ?>
+    <?php if($this->getCheckboxCheckCallback()): ?>
+        <?php echo $this->getJsObjectName() ?>.checkboxCheckCallback = <?php echo $this->getCheckboxCheckCallback() ?>;
+    <?php endif; ?>
+    <?php if($this->getRowInitCallback()): ?>
+        <?php echo $this->getJsObjectName() ?>.initRowCallback = <?php echo $this->getRowInitCallback() ?>;
+        <?php echo $this->getJsObjectName() ?>.initGridRows();
+    <?php endif; ?>
+    <?php if($this->getMassactionBlock()->isAvailable()): ?>
+    <?php echo $this->getMassactionBlock()->getJavaScript() ?>
+    <?php endif ?>
+    <?php echo $this->getAdditionalJavaScript(); ?>
+//]]>
+    
+    	
+	var editImage = '<a href=#><img class="edit_pointer" src="<?php echo $this->getSkinUrl('images/apptha/edit.png'); ?>"></a>';
+    
+	jQuery(document).ready(function($){
+		
+		var editOnClick = function(e){	
+			e.preventDefault();
+	    	var $this = $(this).parent();
+	    	var elementId = $this.attr('data-product-id');
+	    	var elementName = $this.attr('data-edit');
+	    	var elementType = $this.attr('data-type');
+
+	    	$this.find('.edit_pointer').remove();
+	    	
+			if($this.hasClass('active-edit')){
+		    	return;
+	    	}
+	    	var previousEdit = $('td.canEdit.active-edit');
+	    	if(previousEdit.length){
+		    	var previousInput = previousEdit.find('input[name=old-'+previousEdit.attr('data-edit')+']');
+			    previousEdit.find('.inner_'+previousEdit.attr('data-edit')).html(previousInput.val());
+			    previousEdit.find('.edit_'+previousEdit.attr('data-edit')).html('');
+			    previousEdit.find('.button_'+previousEdit.attr('data-edit')).html('');
+				previousEdit.removeClass('active-edit');
+	    	}
+			$this.addClass('active-edit');
+
+			var original_html = $this.find(".inner_"+elementName);
+			var original_index = original_html.attr('data-real');
+			var orginal_value = original_html.text();
+			orginal_value = orginal_value.trim();
+       		
+			if(elementType == 'options'){
+				var option_html = $('#productGrid_product_filter_'+elementName)
+									.clone()
+									.attr('id', 'new_option' + elementName);
+				option_html.val(original_index);
+				
+			} else {
+				var option_html = $('<input name='+elementName+' id="new_option'+ elementName +'" />');
+				
+				option_html.val(orginal_value);
+			}
+			
+			
+    		var input_old = $('<input class=pre name=old-'+elementName+' type=hidden />');
+    		var save_btn = $('<a href="#" data-product-id="'+elementId+'" data-save="'+elementName+'" class="quickSave add "><img src="<?php echo $this->getSkinUrl('images/apptha/validate.png')?>"/></a>');
+    		var cancel_btn = $('<a href="#"  data-revert="'+elementName+'" class="quickSave cancel"><img  src="<?php echo $this->getSkinUrl('images/apptha/cross.png')?>"/></a>');
+
+    		input_old.val(orginal_value);
+
+       	 	var edit_status = $this.find('.edit_'+elementName);
+			var button_status = $this.find('.button_'+elementName);
+
+       	 	cancel_btn.click(function(e){
+				e.preventDefault();
+				var canel_ele = $(this);
+
+				var previousEdit = $('td.canEdit.active-edit');
+		    	if(previousEdit.length){	
+			    	var previousInput = previousEdit.find('input[name=old-'+previousEdit.attr('data-edit')+']');
+				  /*previousEdit.find('.inner_'+previousEdit.attr('data-edit')).html(previousInput.val());*/
+				    previousEdit.find('.edit_'+previousEdit.attr('data-edit')).html('');
+				    previousEdit.find('.button_'+previousEdit.attr('data-edit')).html('');
+					previousEdit.removeClass('active-edit');
+		    	}
+		    	
+			});
+			
+
+    		save_btn.click(function(e){
+    			e.preventDefault();
+    			var save_ele = $(this);
+    			var productid = save_ele.attr('data-product-id');
+    			var eleName =   save_ele.attr('data-save');
+    			var eleValue = $('#new_option'+eleName).val();
+    			if(!eleValue.length){
+        			return;
+    			}
+    			new Ajax.Request("<?php echo $this->getUrl('extendedmassaction/adminhtml_grid/index') ?>", {
+			           method: 'Post',
+			           dataType: 'json',
+			           parameters: {"id":productid,"name":eleValue,"index":eleName},
+			           onComplete: function(transport) {
+
+			        	   var obj = $.parseJSON(transport.responseText);
+						   var data = obj.name;
+						  
+			        	   if(obj.status=='error'){
+								window.alert('Invalid');
+			        	   	}else if(obj.msg_qty=='error'){
+				        		window.alert('Cannot apply quantity of this product type');
+							}else if(obj.msg_sku == 'error'){
+									window.alert('Sku already exists');
+					        }else if(obj.msg_price == 'error'){
+					        		   window.alert('Cannot apply price of this product type');	
+					        }else{
+			        	   
+							/*var data=(transport.responseText).replace(/\"/g, '');*/
+			        		var currentEdit = $('td.canEdit.active-edit');
+							if(currentEdit.length){	
+								currentEdit.find('.inner_'+currentEdit.attr('data-edit')).attr('data-real',eleValue);
+						    	currentEdit.find('.inner_'+currentEdit.attr('data-edit')).html(data);
+					    		currentEdit.find('.edit_'+currentEdit.attr('data-edit')).html('');
+					    		currentEdit.find('.button_'+currentEdit.attr('data-edit')).html('');
+					    		currentEdit.removeClass('active-edit');
+					    	}
+						}
+			         }
+			    });			
+        	});
+
+    		edit_status.html(option_html);
+    		edit_status.append(input_old);  
+    		button_status.append(save_btn);
+    		button_status.append(cancel_btn);   		
+    		
+      	};
+
+    	$('td.canEdit').hover(
+    			function(){
+    				if(!$(this).hasClass('active-edit')){
+    					var editpointer = $(editImage);
+    					editpointer.on('click',editOnClick);
+    					$(this).append(editpointer);
+    				}
+    			},
+    			function(){
+    				$(this).find('.edit_pointer').remove();
+    			}
+    		);	  
+	});
+</script>
+<?php endif; ?>
+<?php endif ?>

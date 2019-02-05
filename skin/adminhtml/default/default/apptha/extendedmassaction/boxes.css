@@ -1,0 +1,13 @@
+/*
+* Create special price
+*/
+/* .adminhtml-catalog-product-index #productGrid_massaction-form #productGrid_massaction-form-additional .absolute-advice{width:70px !important} */
+#productGrid_massaction .massaction td{width: inherit;}
+#productGrid_massaction #productGrid_massaction-form-additional input.input-text{width:35px;}
+
+/**
+* Manage product list
+*/
+#show_hide_cloumns ul li{float:left;width:25%;padding: 5px 0;}
+#show_hide_cloumns .scalable{clear: both;display: block;margin: 15px 0px;}
+#productGrid_table .canEdit .inner_name{width:220px;}

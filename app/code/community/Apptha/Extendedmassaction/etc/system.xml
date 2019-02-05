@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <tabs>
+        <extendedmassaction translate="label" module="extendedmassaction">
+            <label>Apptha</label>
+            <sort_order>99</sort_order>
+        </extendedmassaction>
+    </tabs>
+    
+    <sections>
+        <extendedmassaction_options translate="label" module="extendedmassaction">
+            
+            <tab>extendedmassaction</tab>
+            <label>Extended Mass Action</label>
+            <frontend_type>text</frontend_type>
+            <sort_order>999</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store> 
+            
+            <groups>
+                <messages translate="label">
+                    <label>General Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    
+                    <fields>        
+        		    <active translate="label comment">
+                            <label>Apptha Extended Mass Action</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>54</sort_order>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+    				</fields>  
+   
+                </messages>
+            </groups>
+                               
+        </extendedmassaction_options>
+    </sections>  
+    
+   
+              
+</config>
